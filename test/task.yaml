@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  EnvType:
+    Description: Which environments to deploy your service.
+    Type: String
+    AllowedValues: ["development", "staging", "production"]
+    Default: development
+  ContainerImage:
+    Type: String
+    Default: xxxxxxxxxxxx.dkr.ecr.xxxxxx-1.amazonaws.com/test-image:latest
+  TaskCpu:
+    Type: String
+    Default: 256
+    AllowedValues:
+      - '256'
+      - '512'
+      - '1024'
+  TaskMemory:
+    Type: String
+    Default: 512
+    AllowedValues:
+      - '512'
+      - '1024'
+      - '2048'
+      - '1024'
+      - '2048'
+      - '3072'
+      - '4096'
+      - '5120'
+      - '6144'
+      - '7168'
+      - '8192'
+Mappings:
+  DefinitionMap:
+    development:
+      LogLevel: debug
+      GinMode: debug
+    staging:
+      LogLevel: info
+      GinMode: debug
+    production:
+      LogLevel: info
+      GinMode: release
+Resources:
+  TestTask:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      RequiresCompatibilities:
+        - "EC2"
+        - "FARGATE"
+      ContainerDefinitions:
+        -
+          Name: "my-app"
+          MountPoints:
+            -
+              SourceVolume: "my-vol"
+              ContainerPath: "/var/www/my-vol"
+          Environment:
+            - Name: LOG_LEVEL
+              Value: !FindInMap [DefinitionMap, !Ref EnvType, LogLevel]
+            - Name: GIN_MODE
+              Value: !FindInMap [DefinitionMap, !Ref EnvType, GinMode]
+          Image: !Ref ContainerImage
+          Cpu: !Ref TaskCpu
+          EntryPoint:
+            - "/usr/sbin/apache2"
+            - "-D"
+            - "FOREGROUND"
+          Memory: !Ref TaskMemory
+          Essential: true
+        -
+          Name: "busybox"
+          Image: "busybox"
+          Cpu: 256
+          EntryPoint:
+            - "sh"
+            - "-c"
+          Memory: 512
+          Command:
+            - "/bin/sh -c \"while true; do /bin/date > /var/www/my-vol/date; sleep 1; done\""
+          Essential: false
+          DependsOn:
+            - ContainerName: my-app
+              Condition: START
+          VolumesFrom:
+            -
+              SourceContainer: "my-app"
+      Volumes:
+        -
+          Host:
+            SourcePath: "/var/lib/docker/vfs/dir/"
+          Name: "my-vol"

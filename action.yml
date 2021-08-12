@@ -1,0 +1,28 @@
+name: "render-cfm-to-json"
+description: "Extracts the property part of the specified resource from the specified CloudFormation file and creates a json"
+author: "goccha"
+inputs:
+  name:
+    description: "target resource name"
+    required: true
+  json-params:
+    description: "json format parameters"
+    required: false
+  cfm-definition:
+    description: "The path to the CloudFormation file"
+    required: true
+outputs:
+  json-file:
+    description: "temp file path"
+  json-body:
+    description: "json body"
+runs:
+  using: "docker"
+  image: "docker://ghcr.io/goccha/render-cfm-to-json:v0.0.1"
+  args:
+    - --name
+    - ${{ inputs.name }}
+    - --json-params
+    - ${{ inputs.json-params }}
+    - --cfm
+    - ${{ inputs.cfm-definition }}
