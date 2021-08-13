@@ -7,6 +7,7 @@ import (
 	"github.com/awslabs/goformation/v5/intrinsics"
 	"github.com/iancoleman/strcase"
 	"golang.org/x/xerrors"
+	"strings"
 )
 
 type Renderer struct {
@@ -56,7 +57,9 @@ func openTemplate(cfm string, params map[string]interface{}) (template *cloudfor
 func toLowerCamelKey(m map[string]interface{}) map[string]interface{} {
 	result := make(map[string]interface{})
 	for k, v := range m {
-		k = strcase.ToLowerCamel(k)
+		if !strings.ContainsAny(k, "-") {
+			k = strcase.ToLowerCamel(k)
+		}
 		switch v := v.(type) {
 		case map[string]interface{}:
 			result[k] = toLowerCamelKey(v)

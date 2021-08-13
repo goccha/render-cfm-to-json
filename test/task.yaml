@@ -8,28 +8,38 @@ Parameters:
   ContainerImage:
     Type: String
     Default: xxxxxxxxxxxx.dkr.ecr.xxxxxx-1.amazonaws.com/test-image:latest
-  TaskCpu:
+  Port:
+    Type: Number
+    Default: 8080
+  Compatibilities:
     Type: String
+    Default: FARGATE
+    AllowedValues:
+      - EC2
+      - FARGATE
+  TaskCpu:
+    Type: Number
     Default: 256
     AllowedValues:
-      - '256'
-      - '512'
-      - '1024'
+      - 256
+      - 512
+      - 1024
   TaskMemory:
-    Type: String
+    Type: Number
     Default: 512
     AllowedValues:
-      - '512'
-      - '1024'
-      - '2048'
-      - '1024'
-      - '2048'
-      - '3072'
-      - '4096'
-      - '5120'
-      - '6144'
-      - '7168'
-      - '8192'
+      - 512
+      - 1024
+      - 2048
+      - 3072
+      - 4096
+      - 5120
+      - 6144
+      - 7168
+      - 8192
+Conditions:
+  IsFargate:
+    !Equals [!Ref Compatibilities, "FARGATE"]
 Mappings:
   DefinitionMap:
     development:
@@ -61,6 +71,10 @@ Resources:
             - Name: GIN_MODE
               Value: !FindInMap [DefinitionMap, !Ref EnvType, GinMode]
           Image: !Ref ContainerImage
+          PortMappings:
+            - ContainerPort: !Ref Port
+              HostPort: !If [ IsFargate, !Ref Port, 0]
+              Protocol: tcp
           Cpu: !Ref TaskCpu
           EntryPoint:
             - "/usr/sbin/apache2"

@@ -2,6 +2,7 @@ package cloudformation
 
 import (
 	"encoding/json"
+	"fmt"
 	"testing"
 )
 
@@ -9,16 +10,15 @@ func TestRenderer_Render(t *testing.T) {
 	ren := &Renderer{
 		Name: "TestTask",
 		Params: map[string]interface{}{
-			"EnvType":    "production",
-			"TaskCpu":    512,
-			"TaskMemory": 1024,
+			"EnvType": "production",
 		},
 	}
 	cfm := "../../test/task.yaml"
-	_, min, err := ren.Render(cfm)
+	indent, min, err := ren.Render(cfm)
 	if err != nil {
 		t.Error(err)
 	} else {
+		fmt.Printf("%s\n", string(indent))
 		m := make(map[string]interface{})
 		if err = json.Unmarshal(min, &m); err != nil {
 			t.Error(err)
