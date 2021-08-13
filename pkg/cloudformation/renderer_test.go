@@ -33,11 +33,11 @@ func TestRenderer_Render(t *testing.T) {
 					t.Errorf("image=%v", container["image"])
 					return
 				}
-				if container["cpu"] != float64(512) {
+				if container["cpu"] != float64(256) {
 					t.Errorf("cpu=%v", container["cpu"])
 					return
 				}
-				if container["memory"] != float64(1024) {
+				if container["memory"] != float64(512) {
 					t.Errorf("memory=%v", container["memory"])
 					return
 				}
