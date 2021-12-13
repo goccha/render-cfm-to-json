@@ -1,6 +1,6 @@
 github.com/awslabs/goformation/v4 v4.19.5/go.mod h1:JoNpnVCBOUtEz9bFxc9sjy8uBUCLF5c4D1L7RhRTVM8=
-github.com/awslabs/goformation/v5 v5.2.6 h1:vyZXaE1axVaZ/M2Z7+NE4oYOoqv9w8QvuqENdspNRLY=
-github.com/awslabs/goformation/v5 v5.2.6/go.mod h1:zGVZfdzJB7z7Uxm0YhWvx77qnNT8b9kc78twJ/TOtdk=
+github.com/awslabs/goformation/v5 v5.4.0 h1:r9f10J1anE/hhFocM3eNV73M1XK+qQyJCfhlqmp4oTo=
+github.com/awslabs/goformation/v5 v5.4.0/go.mod h1:zGVZfdzJB7z7Uxm0YhWvx77qnNT8b9kc78twJ/TOtdk=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMoQvtojpjFo=
